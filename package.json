@@ -1,0 +1,16 @@
+{
+  "name": "auth-service",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": ""
+  },
+  "keywords": [],
+  "author": "suneel bhai <rsuneel47@gmail.com>",
+  "license": "ISC",
+  "description": "This is the auth-service for a microservice application.",
+  "devDependencies": {
+    "@types/node": "^20.14.0",
+    "typescript": "^5.4.5"
+  }
+}
