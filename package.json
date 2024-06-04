@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": ""
+    "dev": "",
+    "format:check": "prettier . --check",
+    "format:fix": "prettier . --write"
   },
   "keywords": [],
   "author": "suneel bhai <rsuneel47@gmail.com>",
@@ -11,6 +13,7 @@
   "description": "This is the auth-service for a microservice application.",
   "devDependencies": {
     "@types/node": "^20.14.0",
+    "prettier": "3.3.0",
     "typescript": "^5.4.5"
   }
 }
