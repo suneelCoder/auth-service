@@ -1,5 +1,5 @@
-function login(username: string): Boolean {
+function login(): boolean {
     return true;
 }
 
-login("");
+login();
