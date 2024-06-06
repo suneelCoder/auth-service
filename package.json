@@ -5,7 +5,10 @@
   "scripts": {
     "dev": "",
     "format:check": "prettier . --check",
-    "format:fix": "prettier . --write"
+    "format:fix": "prettier . --write",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "prepare": "husky"
   },
   "keywords": [],
   "author": "suneel bhai <rsuneel47@gmail.com>",
@@ -19,6 +22,7 @@
     "@typescript-eslint/parser": "^7.12.0",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
+    "husky": "^9.0.11",
     "prettier": "3.3.0",
     "typescript": "^5.4.5",
     "typescript-eslint": "^7.12.0"
