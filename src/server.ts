@@ -10,7 +10,12 @@ const startServer = () => {
         );
     } catch (error) {
         // console.log(error);
-        process.exit(1);
+        if (error instanceof Error) {
+            logger.error(error.message);
+            setTimeout(() => {
+                process.exit(1);
+            }, 1000);
+        }
     }
 };
 
