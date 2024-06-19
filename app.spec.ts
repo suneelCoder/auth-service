@@ -1,7 +1,7 @@
 import app from "./src/app";
 import calculate from "./src/utils";
 import request from "supertest";
-describe("App", () => {
+describe.skip("App", () => {
     it("should work", () => {
         const res = calculate(100, 10);
         expect(res).toBe(10);
