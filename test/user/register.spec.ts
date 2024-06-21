@@ -22,7 +22,7 @@ describe("POST /auth/register", () => {
             // Arrange
             const userData = {
                 firstName: "Suneel",
-                lastname: "Kumar",
+                lastName: "Kumar",
                 email: "rsuneel47@gmail.com",
                 password: "password",
             };
@@ -37,7 +37,7 @@ describe("POST /auth/register", () => {
         it("should return valid json ", async () => {
             const userData = {
                 firstName: "Suneel",
-                lastname: "Kumar",
+                lastName: "Kumar",
                 email: "rsuneel47@gmail.com",
                 password: "password",
             };
@@ -55,7 +55,7 @@ describe("POST /auth/register", () => {
     it("should persist the user in database", async () => {
         const userData = {
             firstName: "Suneel",
-            lastname: "Kumar",
+            lastName: "Kumar",
             email: "rsuneel47@gmail.com",
             password: "password",
         };
@@ -66,6 +66,9 @@ describe("POST /auth/register", () => {
         const userRepo = connection.getRepository(User);
         const users = await userRepo.find();
         expect(users).toHaveLength(1);
+        expect(users[0].firstName).toBe(userData.firstName);
+        expect(users[0].lastName).toBe(userData.lastName);
+        expect(users[0].email).toBe(userData.email);
     });
     describe("Fields are missing", () => {});
 });
