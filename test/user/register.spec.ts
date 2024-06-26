@@ -4,6 +4,7 @@ import { DataSource } from "typeorm";
 import { AppDataSource } from "../../src/config/data-source";
 import { User } from "../../src/entity/User";
 import { Roles } from "../../src/constant";
+import { isJwt } from "../utils";
 describe("POST /auth/register", () => {
     let connection: DataSource;
     beforeAll(async () => {
@@ -19,7 +20,7 @@ describe("POST /auth/register", () => {
         await connection.destroy();
     });
     describe("Given all fields", () => {
-        it("should return 201 status could", async () => {
+        it("should return 201 status code", async () => {
             // AAA
             // Arrange
             const userData = {
@@ -124,6 +125,49 @@ describe("POST /auth/register", () => {
 
         expect(response.statusCode).toBe(400);
         expect(users).toHaveLength(1);
+    });
+    it("should return access and refresh token inside cookie", async () => {
+        const userData = {
+            firstName: "Suneel",
+            lastName: "Kumar",
+            email: "rsuneel47@gmail.com",
+            password: "password",
+            role: Roles.CUSTOMER,
+        };
+        // Act
+        const response = await request(app)
+            .post("/auth/register")
+            .send(userData);
+
+        // Define a custom type for headers that might include 'set-cookie'
+        interface CustomHeaders {
+            [key: string]: [];
+        }
+
+        // Cast to CustomHeaders
+        const responseHeaders = response.headers as unknown as CustomHeaders;
+
+        // Extract cookies if they exist
+        const cookies = responseHeaders["set-cookie"] || [];
+
+        let accessToken = null;
+        let refreshToken = null;
+
+        // Process cookies to extract tokens
+        cookies.forEach((element: string) => {
+            if (element.startsWith("accessToken=")) {
+                accessToken = element.split(";")[0].split("=")[1];
+            }
+            if (element.startsWith("refreshToken=")) {
+                refreshToken = element.split(";")[0].split("=")[1];
+            }
+        });
+
+        // Assertions to verify the tokens are not null
+        expect(accessToken).not.toBeNull();
+        expect(refreshToken).not.toBeNull();
+        expect(isJwt(accessToken)).toBeTruthy();
+        // expect(isJwt(refreshToken)).toBeTruthy()
     });
     describe("Fields are missing", () => {
         it("should return 400 status code if email field is missing", async () => {

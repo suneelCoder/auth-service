@@ -3,7 +3,10 @@ import { RegisterUserRequest } from "../types";
 import { AuthService } from "../service/AuthService";
 import { Logger } from "winston";
 import { validationResult } from "express-validator";
-
+import { JwtPayload, sign } from "jsonwebtoken";
+import fs from "fs";
+import path from "path";
+import createHttpError from "http-errors";
 class AuthController {
     constructor(
         private userService: AuthService,
@@ -34,6 +37,41 @@ class AuthController {
                 password,
             });
             this.logger.info("User has been registered", { id: user.id });
+            let privateKey: Buffer;
+            try {
+                privateKey = fs.readFileSync(
+                    path.join(__dirname, "../../certs/private.pem"),
+                );
+            } catch (error) {
+                const err = createHttpError(
+                    500,
+                    "Some error while getting private key",
+                );
+                return next(err);
+            }
+            const payload: JwtPayload = {
+                sub: String(user.id),
+                role: user.role,
+            };
+            const accessToken = sign(payload, privateKey, {
+                expiresIn: "1h",
+                issuer: "auth-service",
+                algorithm: "RS256",
+            });
+
+            const refreshToken = "suneel";
+            res.cookie("accessToken", accessToken, {
+                maxAge: 1000 * 60 * 60,
+                sameSite: "strict",
+                domain: "localhost",
+                httpOnly: true,
+            });
+            res.cookie("refreshToken", refreshToken, {
+                maxAge: 1000 * 60 * 60 * 24 * 365,
+                sameSite: "strict",
+                domain: "localhost",
+                httpOnly: true,
+            });
             res.status(201).json({ message: "Suneel" });
         } catch (error) {
             return next(error);
