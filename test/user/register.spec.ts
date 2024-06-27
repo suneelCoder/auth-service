@@ -167,7 +167,7 @@ describe("POST /auth/register", () => {
         expect(accessToken).not.toBeNull();
         expect(refreshToken).not.toBeNull();
         expect(isJwt(accessToken)).toBeTruthy();
-        // expect(isJwt(refreshToken)).toBeTruthy()
+        expect(isJwt(refreshToken)).toBeTruthy();
     });
     describe("Fields are missing", () => {
         it("should return 400 status code if email field is missing", async () => {

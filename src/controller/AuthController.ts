@@ -7,6 +7,7 @@ import { JwtPayload, sign } from "jsonwebtoken";
 import fs from "fs";
 import path from "path";
 import createHttpError from "http-errors";
+import { Config } from "../config";
 class AuthController {
     constructor(
         private userService: AuthService,
@@ -59,7 +60,11 @@ class AuthController {
                 algorithm: "RS256",
             });
 
-            const refreshToken = "suneel";
+            const refreshToken = sign(payload, Config.JWT_SECRET!, {
+                algorithm: "HS256",
+                expiresIn: "1y",
+                issuer: "auth-service",
+            });
             res.cookie("accessToken", accessToken, {
                 maxAge: 1000 * 60 * 60,
                 sameSite: "strict",
