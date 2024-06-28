@@ -6,10 +6,14 @@ import { AppDataSource } from "../config/data-source";
 import { User } from "../entity/User";
 import logger from "../config/logger";
 import registerValidators from "../validators/register-validators";
+import { TokenService } from "../service/TokenService";
+import { RefreshToken } from "../entity/RefreshToken";
 export const authRouter = Router();
 const userRepo = AppDataSource.getRepository(User);
 const userService = new AuthService(userRepo);
-const authController = new AuthController(userService, logger);
+const refreshTokenRepo = AppDataSource.getRepository(RefreshToken);
+const tokenService = new TokenService(refreshTokenRepo);
+const authController = new AuthController(userService, logger, tokenService);
 
 authRouter.post(
     "/register",
